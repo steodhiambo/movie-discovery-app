@@ -24,22 +24,33 @@ export default function Home() {
       setLoading(true)
       setError(null)
 
-      // Check if API keys are configured
-      const { validateApiKeys } = await import('@/lib/config')
-      const validation = validateApiKeys()
+      console.log('Loading trending content...')
 
-      if (!validation.isValid) {
-        setError('API keys not configured. Please add your TMDB and OMDB API keys to .env.local')
-        return
+      // Call our trending API route
+      const response = await fetch('/api/trending?type=movie&timeWindow=day&enhanced=false')
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
       }
 
-      const trending = await movieApi.getTrending('movie', 'day', false) // Skip OMDB for faster loading
+      const trending = await response.json()
+      console.log('Trending content loaded:', trending.length, 'movies')
+
       setTrendingMovies(trending.slice(0, 12)) // Show top 12
       setError(null)
     } catch (err) {
       console.error('Failed to load trending content:', err)
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load trending content'
-      setError(`${errorMessage}. Please check your API keys and try again.`)
+      let errorMessage = 'Unable to load trending content'
+
+      if (err instanceof Error) {
+        errorMessage = err.message
+        if (err.message.includes('TMDB API key is not configured')) {
+          errorMessage = 'API configuration issue. Please check the API setup.'
+        }
+      }
+
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
