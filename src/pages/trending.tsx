@@ -1,9 +1,9 @@
 // Trending Dashboard - Discover what's popular right now
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import TrendingCard from '@/components/TrendingCard'
 import TimeWindowSelector, { ContentTypeTabs } from '@/components/TimeWindowSelector'
+import { PageHeader } from '@/components/Navigation'
 import { EnhancedMovie } from '@/lib/movieApi'
 
 interface TrendingState {
@@ -17,7 +17,6 @@ interface TrendingState {
 }
 
 export default function TrendingDashboard() {
-  const router = useRouter()
   const [trendingState, setTrendingState] = useState<TrendingState>({
     all: [],
     movies: [],
@@ -111,31 +110,25 @@ export default function TrendingDashboard() {
 
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
-              <div className="mb-4 sm:mb-0">
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  🔥 Trending Now
-                </h1>
-                <p className="text-gray-600 mt-1 text-sm sm:text-base">
-                  Discover what's popular in movies and TV shows
-                </p>
-              </div>
-              <button
-                onClick={() => router.push('/')}
-                className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm sm:text-base self-start sm:self-auto"
-              >
-                ← Back to Home
-              </button>
-            </div>
+        <PageHeader
+          title="Trending Now"
+          subtitle="Discover what's popular in movies and TV shows"
+          icon="🔥"
+          breadcrumb={[
+            { name: 'Home', href: '/' },
+            { name: 'Trending', current: true }
+          ]}
+        />
 
+        {/* Controls */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             {/* Time Window Selector */}
             <TimeWindowSelector
               value={trendingState.timeWindow}
               onChange={handleTimeWindowChange}
               loading={trendingState.loading}
-              className="mb-4 sm:mb-6"
+              className="mb-4"
             />
 
             {/* Content Type Tabs */}
