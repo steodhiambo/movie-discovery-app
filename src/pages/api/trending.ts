@@ -7,16 +7,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { type, timeWindow, enhanced } = req.query
+  const { media_type, time_window, enhanced } = req.query
 
   try {
-    const mediaType = (type as 'movie' | 'tv') || 'movie'
-    const time = (timeWindow as 'day' | 'week') || 'day'
+    const mediaType = (media_type as 'all' | 'movie' | 'tv') || 'movie'
+    const timeWindow = (time_window as 'day' | 'week') || 'day'
     const includeEnhanced = enhanced === 'true'
 
-    const trendingContent = await movieApi.getTrending(mediaType, time, includeEnhanced)
+    const trendingContent = await movieApi.getTrending(mediaType, timeWindow, includeEnhanced)
 
-    res.status(200).json(trendingContent)
+    // Return in the format expected by the frontend
+    res.status(200).json({
+      results: trendingContent,
+      media_type: mediaType,
+      time_window: timeWindow
+    })
+
+
   } catch (error) {
     console.error('Trending API error:', error)
     
