@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { tmdbApi } from '@/lib/tmdb'
 import CastCrew, { SimilarContent } from '@/components/CastCrew'
+import WatchlistButtons from '@/components/WatchlistButtons'
 
 interface TVShowDetailState {
   show: any | null // TV show details from TMDB
@@ -144,7 +145,13 @@ export default function TVShowDetail() {
         {/* Back Navigation */}
         <div className="relative z-20 p-4">
           <button
-            onClick={() => router.back()}
+            onClick={() => {
+              if (window.history.length > 1) {
+                router.back()
+              } else {
+                router.push('/')
+              }
+            }}
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-black/50 hover:bg-black/70 rounded-lg transition-colors duration-200 backdrop-blur-sm"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,15 +293,18 @@ export default function TVShowDetail() {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-4">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                    + Add to Watchlist
-                  </button>
-                  <button className="bg-gray-600 hover:bg-gray-700 md:bg-gray-200 md:hover:bg-gray-300 text-white md:text-gray-800 px-6 py-2 rounded-lg font-medium transition-colors">
-                    ♡ Mark as Watched
-                  </button>
-                </div>
+                {/* Watchlist Action Buttons */}
+                <WatchlistButtons
+                  id={show.id}
+                  title={show.name}
+                  name={show.name}
+                  poster_path={show.poster_path}
+                  first_air_date={show.first_air_date}
+                  vote_average={show.vote_average}
+                  overview={show.overview}
+                  media_type="tv"
+                  className="justify-center lg:justify-start"
+                />
               </div>
             </div>
           </div>
