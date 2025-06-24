@@ -7,6 +7,7 @@ import styles from '@/styles/Home.module.css'
 import SearchBar from '@/components/SearchBar'
 import MovieCard from '@/components/MovieCard'
 import { movieApi, EnhancedMovie } from '@/lib/movieApi'
+import { useWatchlist } from '@/context/WatchlistContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [trendingMovies, setTrendingMovies] = useState<EnhancedMovie[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { getWatchlistStats } = useWatchlist()
 
   useEffect(() => {
     loadTrendingContent()
@@ -159,15 +161,25 @@ export default function Home() {
                 </div>
               </Link>
 
-              <div className="group bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 opacity-50">
+              <Link
+                href="/watchlist"
+                className="group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg p-6 transition-all duration-200 transform hover:scale-105"
+              >
                 <div className="flex items-center">
                   <span className="text-2xl mr-3">📝</span>
                   <div>
-                    <h3 className="font-semibold text-lg">Watchlist</h3>
-                    <p className="text-purple-100 text-sm">Coming soon...</p>
+                    <h3 className="font-semibold text-lg">My Watchlist</h3>
+                    <p className="text-purple-100 text-sm">
+                      {(() => {
+                        const stats = getWatchlistStats()
+                        return stats.total > 0
+                          ? `${stats.total} items • ${stats.unwatched} to watch`
+                          : 'Save movies & TV shows'
+                      })()}
+                    </p>
                   </div>
                 </div>
-              </div>
+              </Link>
 
               <div className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-6 opacity-50">
                 <div className="flex items-center">
