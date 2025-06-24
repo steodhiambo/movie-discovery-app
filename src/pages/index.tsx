@@ -148,7 +148,7 @@ export default function Home() {
         <div className="bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">🚀 Quick Links</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Link
                 href="/search"
                 className="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg p-6 transition-all duration-200 transform hover:scale-105"
@@ -191,6 +191,19 @@ export default function Home() {
                   <div>
                     <h3 className="font-semibold text-lg">Trending</h3>
                     <p className="text-red-100 text-sm">What's popular now</p>
+                  </div>
+                </div>
+              </Link>
+
+              <Link
+                href="/genres"
+                className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg p-6 transition-all duration-200 transform hover:scale-105"
+              >
+                <div className="flex items-center">
+                  <span className="text-2xl mr-3">🎭</span>
+                  <div>
+                    <h3 className="font-semibold text-lg">Genres</h3>
+                    <p className="text-green-100 text-sm">Browse by category</p>
                   </div>
                 </div>
               </Link>
