@@ -29,14 +29,15 @@ export default function Home() {
       console.log('Loading trending content...')
 
       // Call our trending API route
-      const response = await fetch('/api/trending?type=movie&timeWindow=day&enhanced=false')
+      const response = await fetch('/api/trending?media_type=movie&time_window=day&enhanced=false')
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
       }
 
-      const trending = await response.json()
+      const trendingData = await response.json()
+      const trending = trendingData.results || []
       console.log('Trending content loaded:', trending.length, 'movies')
 
       setTrendingMovies(trending.slice(0, 12)) // Show top 12
@@ -94,10 +95,10 @@ export default function Home() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-gray-900">🔥 Trending Today</h2>
             <Link
-              href="/search"
+              href="/trending"
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
-              View All →
+              View All Trending →
             </Link>
           </div>
 
@@ -181,15 +182,18 @@ export default function Home() {
                 </div>
               </Link>
 
-              <div className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-6 opacity-50">
+              <Link
+                href="/trending"
+                className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg p-6 transition-all duration-200 transform hover:scale-105"
+              >
                 <div className="flex items-center">
-                  <span className="text-2xl mr-3">🎭</span>
+                  <span className="text-2xl mr-3">🔥</span>
                   <div>
-                    <h3 className="font-semibold text-lg">Genres</h3>
-                    <p className="text-orange-100 text-sm">Coming soon...</p>
+                    <h3 className="font-semibold text-lg">Trending</h3>
+                    <p className="text-red-100 text-sm">What's popular now</p>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
