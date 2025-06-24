@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { EnhancedMovie } from '@/lib/movieApi'
 import { tmdbApi } from '@/lib/tmdb'
 import { WatchlistButtonCompact } from './WatchlistButtons'
+import { MultiRatingDisplay } from './RatingDisplay'
 
 interface TrendingCardProps {
   movie: EnhancedMovie
@@ -110,16 +111,26 @@ export default function TrendingCard({
             </div>
           </div>
 
+          {/* Multi-Source Ratings */}
+          <div className="mb-3">
+            <MultiRatingDisplay
+              movie={movie}
+              layout="compact"
+              size="sm"
+              showAggregated={movie.dataSource === 'tmdb+omdb'}
+            />
+          </div>
+
           {/* Overview */}
           {movie.overview && (
-            <p className="text-gray-600 text-xs line-clamp-3 leading-relaxed">
+            <p className="text-gray-600 text-xs line-clamp-3 leading-relaxed mb-3">
               {movie.overview}
             </p>
           )}
 
           {/* Enhanced Data Indicator */}
           {movie.dataSource === 'tmdb+omdb' && (
-            <div className="mt-3 flex items-center text-xs text-green-600">
+            <div className="flex items-center text-xs text-green-600">
               <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>

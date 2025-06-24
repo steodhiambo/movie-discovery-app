@@ -21,6 +21,7 @@ export interface EnhancedMovie {
   imdbRating?: string
   imdbVotes?: string
   rottenTomatoesRating?: string
+  rottenTomatoesAudienceRating?: string
   metacriticRating?: string
   awards?: string
   boxOffice?: string
@@ -28,9 +29,21 @@ export interface EnhancedMovie {
   director?: string
   actors?: string
   plot?: string
-  
+
+  // Enhanced rating data
+  ratings?: {
+    tmdb: { score: number; votes: number; outOf: 10 }
+    imdb?: { score: number; votes: string; outOf: 10 }
+    rottenTomatoes?: {
+      critics: { score: number; outOf: 100 }
+      audience?: { score: number; outOf: 100 }
+    }
+    metacritic?: { score: number; outOf: 100 }
+  }
+
   // Combined/computed fields
   combinedRating?: number
+  aggregatedScore?: number
   dataSource: 'tmdb' | 'tmdb+omdb'
 }
 
@@ -162,7 +175,16 @@ class MovieApiClient {
   // Helper: Convert TMDB data to enhanced format
   private convertTMDBToEnhanced(tmdbItem: TMDBMovie | TMDBTVShow | any): EnhancedMovie {
     const isMovie = 'title' in tmdbItem
-    
+
+    // Create basic ratings structure for TMDB-only data
+    const tmdbRatings = {
+      tmdb: {
+        score: tmdbItem.vote_average || 0,
+        votes: tmdbItem.vote_count || 0,
+        outOf: 10
+      }
+    }
+
     return {
       id: tmdbItem.id,
       title: isMovie ? tmdbItem.title : tmdbItem.name,
@@ -174,6 +196,8 @@ class MovieApiClient {
       vote_count: tmdbItem.vote_count,
       genre_ids: tmdbItem.genre_ids || [],
       popularity: tmdbItem.popularity,
+      ratings: tmdbRatings,
+      aggregatedScore: tmdbItem.vote_average || 0,
       dataSource: 'tmdb'
     }
   }
@@ -198,22 +222,54 @@ class MovieApiClient {
 
   // Helper: Merge OMDB data into enhanced movie
   private mergeOMDBData(enhanced: EnhancedMovie, omdbData: OMDBMovieDetails): EnhancedMovie {
-    const ratings = omdbApi.extractRatings(omdbData)
-    
+    const omdbRatings = omdbApi.extractRatings(omdbData)
+
+    // Create structured ratings object
+    const structuredRatings = {
+      tmdb: {
+        score: enhanced.vote_average,
+        votes: enhanced.vote_count,
+        outOf: 10
+      },
+      ...(omdbRatings.imdb && {
+        imdb: {
+          score: parseFloat(omdbRatings.imdb.score) || 0,
+          votes: omdbRatings.imdb.votes || '0',
+          outOf: 10
+        }
+      }),
+      ...(omdbRatings.rottenTomatoes && {
+        rottenTomatoes: {
+          critics: {
+            score: parseInt(omdbRatings.rottenTomatoes.score?.replace('%', '') || '0') || 0,
+            outOf: 100
+          }
+        }
+      }),
+      ...(omdbRatings.metacritic && {
+        metacritic: {
+          score: parseInt(omdbRatings.metacritic.score || '0') || 0,
+          outOf: 100
+        }
+      })
+    }
+
     return {
       ...enhanced,
       imdbId: omdbData.imdbID,
-      imdbRating: ratings.imdb?.score,
-      imdbVotes: ratings.imdb?.votes,
-      rottenTomatoesRating: ratings.rottenTomatoes?.score,
-      metacriticRating: ratings.metacritic?.score,
+      imdbRating: omdbRatings.imdb?.score,
+      imdbVotes: omdbRatings.imdb?.votes,
+      rottenTomatoesRating: omdbRatings.rottenTomatoes?.score,
+      metacriticRating: omdbRatings.metacritic?.score,
       awards: omdbData.Awards !== 'N/A' ? omdbData.Awards : undefined,
       boxOffice: omdbData.BoxOffice !== 'N/A' ? omdbData.BoxOffice : undefined,
       runtime: omdbData.Runtime !== 'N/A' ? omdbData.Runtime : undefined,
       director: omdbData.Director !== 'N/A' ? omdbData.Director : undefined,
       actors: omdbData.Actors !== 'N/A' ? omdbData.Actors : undefined,
       plot: omdbData.Plot !== 'N/A' ? omdbData.Plot : enhanced.overview,
-      combinedRating: this.calculateCombinedRating(enhanced.vote_average, ratings.imdb?.score),
+      ratings: structuredRatings,
+      combinedRating: this.calculateCombinedRating(enhanced.vote_average, omdbRatings.imdb?.score),
+      aggregatedScore: this.calculateAggregatedScore(structuredRatings),
       dataSource: 'tmdb+omdb'
     }
   }
@@ -221,13 +277,52 @@ class MovieApiClient {
   // Helper: Calculate combined rating from TMDB and IMDB
   private calculateCombinedRating(tmdbRating: number, imdbRating?: string): number {
     if (!imdbRating) return tmdbRating
-    
+
     const imdbScore = parseFloat(imdbRating)
     if (isNaN(imdbScore)) return tmdbRating
-    
+
     // Convert TMDB (0-10) and IMDB (0-10) to a weighted average
     // TMDB weight: 0.4, IMDB weight: 0.6 (IMDB generally more trusted)
     return Math.round((tmdbRating * 0.4 + imdbScore * 0.6) * 10) / 10
+  }
+
+  // Helper: Calculate aggregated score from all available ratings
+  private calculateAggregatedScore(ratings: any): number {
+    const scores: { value: number; weight: number }[] = []
+
+    // TMDB rating (weight: 0.25)
+    if (ratings.tmdb?.score > 0) {
+      scores.push({ value: ratings.tmdb.score, weight: 0.25 })
+    }
+
+    // IMDB rating (weight: 0.35 - most trusted)
+    if (ratings.imdb?.score > 0) {
+      scores.push({ value: ratings.imdb.score, weight: 0.35 })
+    }
+
+    // Rotten Tomatoes critics (weight: 0.25, convert from 100 to 10 scale)
+    if (ratings.rottenTomatoes?.critics?.score > 0) {
+      scores.push({
+        value: ratings.rottenTomatoes.critics.score / 10,
+        weight: 0.25
+      })
+    }
+
+    // Metacritic (weight: 0.15, convert from 100 to 10 scale)
+    if (ratings.metacritic?.score > 0) {
+      scores.push({
+        value: ratings.metacritic.score / 10,
+        weight: 0.15
+      })
+    }
+
+    if (scores.length === 0) return 0
+
+    // Calculate weighted average
+    const totalWeight = scores.reduce((sum, score) => sum + score.weight, 0)
+    const weightedSum = scores.reduce((sum, score) => sum + (score.value * score.weight), 0)
+
+    return Math.round((weightedSum / totalWeight) * 10) / 10
   }
 
   // Helper: Create standardized error

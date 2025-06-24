@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { EnhancedMovie } from '@/lib/movieApi'
 import { tmdbApi } from '@/lib/tmdb'
+import { MultiRatingDisplay } from './RatingDisplay'
 
 interface MovieCardProps {
   movie: EnhancedMovie
@@ -80,26 +81,18 @@ export default function MovieCard({
           </p>
         )}
 
+        {/* Multi-Source Ratings */}
+        <div className="mb-3">
+          <MultiRatingDisplay
+            movie={movie}
+            layout="compact"
+            size="sm"
+            showAggregated={movie.dataSource === 'tmdb+omdb'}
+          />
+        </div>
+
         {/* Additional Info */}
         <div className="flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center space-x-2">
-            {/* TMDB Rating */}
-            {movie.vote_average > 0 && (
-              <span className="flex items-center">
-                <span className="text-yellow-500 mr-1">★</span>
-                {movie.vote_average.toFixed(1)}
-              </span>
-            )}
-
-            {/* IMDB Rating (if available) */}
-            {movie.imdbRating && (
-              <span className="flex items-center">
-                <span className="text-orange-500 mr-1">IMDb</span>
-                {movie.imdbRating}
-              </span>
-            )}
-          </div>
-
           {/* Popularity Indicator */}
           {movie.popularity > 100 && (
             <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">

@@ -125,10 +125,21 @@ export default function GenrePage() {
   const sortOptions = [
     { value: 'popularity.desc', label: 'Most Popular' },
     { value: 'popularity.asc', label: 'Least Popular' },
-    { value: 'vote_average.desc', label: 'Highest Rated' },
-    { value: 'vote_average.asc', label: 'Lowest Rated' },
+    { value: 'vote_average.desc', label: 'Highest Rated (TMDB)' },
+    { value: 'vote_average.asc', label: 'Lowest Rated (TMDB)' },
     { value: 'release_date.desc', label: 'Newest First' },
     { value: 'release_date.asc', label: 'Oldest First' }
+  ]
+
+  // Rating filter options
+  const ratingOptions = [
+    { value: '', label: 'Any Rating' },
+    { value: '9', label: '9+ Stars (Excellent)' },
+    { value: '8', label: '8+ Stars (Very Good)' },
+    { value: '7', label: '7+ Stars (Good)' },
+    { value: '6', label: '6+ Stars (Above Average)' },
+    { value: '5', label: '5+ Stars (Average)' },
+    { value: '4', label: '4+ Stars (Below Average)' }
   ]
 
   // Generate year options (last 50 years)
@@ -242,15 +253,14 @@ export default function GenrePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Min Rating</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Min Rating (TMDB)</label>
                     <select
                       value={filters.minRating}
                       onChange={(e) => handleFilterChange({ minRating: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
-                      <option value="">Any Rating</option>
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rating => (
-                        <option key={rating} value={rating}>{rating}+ Stars</option>
+                      {ratingOptions.map(option => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
                       ))}
                     </select>
                   </div>
