@@ -53,12 +53,25 @@ export default function Search() {
     setSearchState(prev => ({ ...prev, loading: true, error: null }))
 
     try {
-      const searchResults = await movieApi.search({
-        query: query.trim(),
-        page,
+      console.log('Performing search:', { query: query.trim(), page, type: filters.type, enhanced: filters.includeOMDB })
+
+      // Call our search API route
+      const searchParams = new URLSearchParams({
+        q: query.trim(),
+        page: page.toString(),
         type: filters.type,
-        includeOMDBData: filters.includeOMDB
+        enhanced: filters.includeOMDB.toString()
       })
+
+      const response = await fetch(`/api/search?${searchParams}`)
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      const searchResults = await response.json()
+      console.log('Search results received:', searchResults.totalResults, 'results')
 
       setSearchState(prev => ({
         ...prev,
@@ -78,10 +91,19 @@ export default function Search() {
 
     } catch (error) {
       console.error('Search error:', error)
+      let errorMessage = 'Search failed. Please try again.'
+
+      if (error instanceof Error) {
+        errorMessage = error.message
+        if (error.message.includes('TMDB API key is not configured')) {
+          errorMessage = 'API configuration issue. Please check the API setup.'
+        }
+      }
+
       setSearchState(prev => ({
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Search failed. Please try again.'
+        error: errorMessage
       }))
     }
   }
