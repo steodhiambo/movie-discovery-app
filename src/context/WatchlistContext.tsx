@@ -31,6 +31,7 @@ type WatchlistAction =
 
 interface WatchlistContextType {
   state: WatchlistState
+  watchlist: WatchlistItem[] // Convenience property for easy access
   addToWatchlist: (item: Omit<WatchlistItem, 'added_date' | 'watched'>) => void
   removeFromWatchlist: (id: number) => void
   toggleWatched: (id: number) => void
@@ -159,6 +160,7 @@ export const WatchlistProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   const value: WatchlistContextType = {
     state,
+    watchlist: state.items || [], // Provide default empty array
     addToWatchlist,
     removeFromWatchlist,
     toggleWatched,

@@ -207,6 +207,19 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
+
+              <Link
+                href="/recommendations"
+                className="group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg p-6 transition-all duration-200 transform hover:scale-105"
+              >
+                <div className="flex items-center">
+                  <span className="text-2xl mr-3">🤖</span>
+                  <div>
+                    <h3 className="font-semibold text-lg">For You</h3>
+                    <p className="text-purple-100 text-sm">Personalized picks</p>
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
