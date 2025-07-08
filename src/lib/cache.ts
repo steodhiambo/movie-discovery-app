@@ -55,7 +55,8 @@ class ApiCache {
   // Clean up expired items
   cleanup(): void {
     const now = Date.now()
-    for (const [key, item] of this.cache.entries()) {
+    const entries = Array.from(this.cache.entries())
+    for (const [key, item] of entries) {
       if (now > item.expiresAt) {
         this.cache.delete(key)
       }
@@ -68,7 +69,8 @@ class ApiCache {
     let expired = 0
     let active = 0
 
-    for (const item of this.cache.values()) {
+    const values = Array.from(this.cache.values())
+    for (const item of values) {
       if (now > item.expiresAt) {
         expired++
       } else {

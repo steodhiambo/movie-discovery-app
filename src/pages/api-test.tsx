@@ -40,7 +40,7 @@ export default function ApiTestPage() {
       
       if (trendingMovies.results.length > 0) {
         const firstMovie = trendingMovies.results[0]
-        results.push(`   Sample: "${firstMovie.title || firstMovie.name}" (ID: ${firstMovie.id})`)
+        results.push(`   Sample: "${(firstMovie as any).title || (firstMovie as any).name}" (ID: ${firstMovie.id})`)
       }
       results.push('')
       setTestResults([...results])

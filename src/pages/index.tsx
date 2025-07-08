@@ -107,7 +107,7 @@ export default function Home() {
                 🔥 Trending Now
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Discover what's popular today and join millions of viewers worldwide
+                Discover what&apos;s popular today and join millions of viewers worldwide
               </p>
             </div>
 
@@ -129,7 +129,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Unable to load trending content</h3>
                 <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                  We're having trouble fetching the latest trending movies. Please try again or explore other sections.
+                  We&apos;re having trouble fetching the latest trending movies. Please try again or explore other sections.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <button

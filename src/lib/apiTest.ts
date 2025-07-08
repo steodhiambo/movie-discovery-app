@@ -22,7 +22,7 @@ export async function testApiIntegration() {
     
     if (trendingMovies.results.length > 0) {
       const firstMovie = trendingMovies.results[0]
-      console.log(`   Sample: "${firstMovie.title || firstMovie.name}" (ID: ${firstMovie.id})`)
+      console.log(`   Sample: "${(firstMovie as any).title || (firstMovie as any).name}" (ID: ${firstMovie.id})`)
     }
 
     // 3. Test TMDB search

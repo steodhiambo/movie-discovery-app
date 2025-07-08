@@ -141,7 +141,15 @@ export default function RecommendationCard({
                   {movie.title}
                 </h3>
               </Link>
-              <WatchlistButtonCompact movie={movie} />
+              <WatchlistButtonCompact
+                id={movie.id}
+                title={movie.title}
+                poster_path={movie.poster_path}
+                release_date={movie.release_date}
+                vote_average={movie.vote_average}
+                overview={movie.overview}
+                media_type="movie"
+              />
             </div>
 
             {/* Category Badge */}
@@ -194,7 +202,15 @@ export default function RecommendationCard({
 
       {/* Watchlist Button */}
       <div className="absolute top-12 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <WatchlistButtonCompact movie={movie} />
+        <WatchlistButtonCompact
+          id={movie.id}
+          title={movie.title}
+          poster_path={movie.poster_path}
+          release_date={movie.release_date}
+          vote_average={movie.vote_average}
+          overview={movie.overview}
+          media_type="movie"
+        />
       </div>
 
       <Link href={`/movie/${movie.id}`} className="block">

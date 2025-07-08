@@ -48,7 +48,15 @@ export default function TrendingCard({
 
       {/* Watchlist Button */}
       <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <WatchlistButtonCompact movie={movie} />
+        <WatchlistButtonCompact
+          id={movie.id}
+          title={movie.title}
+          poster_path={movie.poster_path}
+          release_date={movie.release_date}
+          vote_average={movie.vote_average}
+          overview={movie.overview}
+          media_type={mediaType}
+        />
       </div>
 
       <Link href={`/${mediaType}/${movie.id}`} className="block">

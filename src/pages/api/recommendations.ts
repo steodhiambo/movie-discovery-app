@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Get watchlist movies with enhanced data
-    let validWatchlistMovies = []
+    let validWatchlistMovies: any[] = []
     if (watchlistIds.length > 0) {
       const watchlistMovies = await Promise.all(
         watchlistIds.slice(0, 50).map(async (id) => { // Limit to 50 for performance

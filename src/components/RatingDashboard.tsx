@@ -26,10 +26,10 @@ export default function RatingDashboard({ movie, className = "" }: RatingDashboa
   const getStatistics = () => {
     const availableRatings = []
     
-    if (ratings.tmdb?.score > 0) availableRatings.push(ratings.tmdb.score)
-    if (ratings.imdb?.score > 0) availableRatings.push(ratings.imdb.score)
-    if (ratings.rottenTomatoes?.critics.score > 0) availableRatings.push(ratings.rottenTomatoes.critics.score / 10)
-    if (ratings.metacritic?.score > 0) availableRatings.push(ratings.metacritic.score / 10)
+    if (ratings.tmdb?.score && ratings.tmdb.score > 0) availableRatings.push(ratings.tmdb.score)
+    if (ratings.imdb?.score && ratings.imdb.score > 0) availableRatings.push(ratings.imdb.score)
+    if (ratings.rottenTomatoes?.critics.score && ratings.rottenTomatoes.critics.score > 0) availableRatings.push(ratings.rottenTomatoes.critics.score / 10)
+    if (ratings.metacritic?.score && ratings.metacritic.score > 0) availableRatings.push(ratings.metacritic.score / 10)
 
     if (availableRatings.length === 0) return null
 

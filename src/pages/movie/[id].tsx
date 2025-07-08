@@ -122,7 +122,7 @@ export default function MovieDetail() {
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <h4 className="font-medium text-blue-900 mb-2">🎬 Movie Detail Features</h4>
                     <p className="text-blue-700 text-sm mb-3">
-                      Once API keys are configured, you'll see:
+                      Once API keys are configured, you&apos;ll see:
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-blue-600">
                       <div className="flex items-center">
@@ -369,10 +369,10 @@ export default function MovieDetail() {
             )}
 
             {/* Similar Movies */}
-            {(movie.similar?.results || movie.recommendations?.results) && (
+            {((movie as any).similar?.results || (movie as any).recommendations?.results) && (
               <SimilarContent
-                similar={movie.similar?.results}
-                recommendations={movie.recommendations?.results}
+                similar={(movie as any).similar?.results}
+                recommendations={(movie as any).recommendations?.results}
                 type="movie"
                 maxItems={6}
               />

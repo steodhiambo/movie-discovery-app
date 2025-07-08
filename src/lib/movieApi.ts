@@ -181,7 +181,7 @@ class MovieApiClient {
       tmdb: {
         score: tmdbItem.vote_average || 0,
         votes: tmdbItem.vote_count || 0,
-        outOf: 10
+        outOf: 10 as const
       }
     }
 
@@ -204,8 +204,8 @@ class MovieApiClient {
 
   // Helper: Get OMDB data for a movie
   private async getOMDBDataForMovie(title: string, releaseDate: string): Promise<OMDBMovieDetails | null> {
+    const year = releaseDate ? new Date(releaseDate).getFullYear() : undefined
     try {
-      const year = releaseDate ? new Date(releaseDate).getFullYear() : undefined
       return await omdbApi.getByTitle(title, year, 'movie')
     } catch (error) {
       // Try without year if the first attempt fails
@@ -229,27 +229,27 @@ class MovieApiClient {
       tmdb: {
         score: enhanced.vote_average,
         votes: enhanced.vote_count,
-        outOf: 10
+        outOf: 10 as const
       },
       ...(omdbRatings.imdb && {
         imdb: {
           score: parseFloat(omdbRatings.imdb.score) || 0,
           votes: omdbRatings.imdb.votes || '0',
-          outOf: 10
+          outOf: 10 as const
         }
       }),
       ...(omdbRatings.rottenTomatoes && {
         rottenTomatoes: {
           critics: {
             score: parseInt(omdbRatings.rottenTomatoes.score?.replace('%', '') || '0') || 0,
-            outOf: 100
+            outOf: 100 as const
           }
         }
       }),
       ...(omdbRatings.metacritic && {
         metacritic: {
           score: parseInt(omdbRatings.metacritic.score || '0') || 0,
-          outOf: 100
+          outOf: 100 as const
         }
       })
     }

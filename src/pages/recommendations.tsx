@@ -280,56 +280,56 @@ export default function RecommendationsPage() {
               {/* All Categories View */}
               {recommendationsState.activeCategory === 'all' && (
                 <>
-                  {categorizedRecommendations.because_you_watched.length > 0 && (
+                  {(categorizedRecommendations.because_you_watched?.length || 0) > 0 && (
                     <RecommendationSection
                       title="Because You Watched"
                       subtitle="Based on movies in your watchlist"
                       icon="🎯"
-                      recommendations={categorizedRecommendations.because_you_watched}
+                      recommendations={categorizedRecommendations.because_you_watched || []}
                       size="md"
                       maxItems={6}
                     />
                   )}
 
-                  {categorizedRecommendations.genre_match.length > 0 && (
+                  {(categorizedRecommendations.genre_match?.length || 0) > 0 && (
                     <RecommendationSection
                       title="Your Favorite Genres"
                       subtitle="Movies in genres you love"
                       icon="🎭"
-                      recommendations={categorizedRecommendations.genre_match}
+                      recommendations={categorizedRecommendations.genre_match || []}
                       size="md"
                       maxItems={6}
                     />
                   )}
 
-                  {categorizedRecommendations.highly_rated.length > 0 && (
+                  {(categorizedRecommendations.highly_rated?.length || 0) > 0 && (
                     <RecommendationSection
                       title="Highly Rated for You"
                       subtitle="Top-rated movies matching your taste"
                       icon="⭐"
-                      recommendations={categorizedRecommendations.highly_rated}
+                      recommendations={categorizedRecommendations.highly_rated || []}
                       size="md"
                       maxItems={6}
                     />
                   )}
 
-                  {categorizedRecommendations.trending.length > 0 && (
+                  {(categorizedRecommendations.trending?.length || 0) > 0 && (
                     <RecommendationSection
                       title="Trending Now"
                       subtitle="Popular movies you might enjoy"
                       icon="🔥"
-                      recommendations={categorizedRecommendations.trending}
+                      recommendations={categorizedRecommendations.trending || []}
                       size="md"
                       maxItems={6}
                     />
                   )}
 
-                  {categorizedRecommendations.similar_taste.length > 0 && (
+                  {(categorizedRecommendations.similar_taste?.length || 0) > 0 && (
                     <RecommendationSection
                       title="Similar Taste"
                       subtitle="For viewers with preferences like yours"
                       icon="💫"
-                      recommendations={categorizedRecommendations.similar_taste}
+                      recommendations={categorizedRecommendations.similar_taste || []}
                       size="md"
                       maxItems={6}
                     />

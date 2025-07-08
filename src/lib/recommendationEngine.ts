@@ -71,8 +71,8 @@ export class RecommendationEngine {
       }
 
       // Language analysis (if available)
-      if (movie.original_language) {
-        languages.push(movie.original_language)
+      if ((movie as any).original_language) {
+        languages.push((movie as any).original_language)
       }
 
       // Actor/Director analysis (if available from OMDB)
