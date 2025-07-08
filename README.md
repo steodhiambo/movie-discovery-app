@@ -1,8 +1,8 @@
 #  Movie Discovery App
 
-A modern, AI-powered movie discovery platform built with Next.js, featuring trending content, personalized recommendations, and smart watchlist management.
+A modern, AI-powered movie discovery platform built with React Next.js, featuring trending content, personalized recommendations, and smart watchlist management.
 
-![Next.js](https://img.shields.io/badge/Next.js-13+-black?style=flat-square&logo=next.js)
+![React Next.js](https://img.shields.io/badge/React_Next.js-13+-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-18+-blue?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3+-38B2AC?style=flat-square&logo=tailwind-css)
@@ -20,7 +20,7 @@ A modern, AI-powered movie discovery platform built with Next.js, featuring tren
 ###  **User Experience**
 - **Responsive Design** - Perfect on desktop, tablet, and mobile
 - **Professional UI** - Clean, modern interface
-- **Fast Performance** - Optimized with Next.js and React
+- **Fast Performance** - Optimized with React Next.js and React
 - **Accessibility** - WCAG compliant design
 - **Progressive Enhancement** - Works without JavaScript
 
@@ -92,7 +92,7 @@ movie-discovery-app/
 │   ├── hooks/              # Custom React hooks
 │   ├── lib/                # Utility libraries
 │   │   └── movieApi.ts
-│   ├── pages/              # Next.js pages
+│   ├── pages/              # React Next.js pages
 │   │   ├── api/            # API routes
 │   │   ├── index.tsx       # Homepage
 │   │   ├── trending.tsx    # Trending page
@@ -166,7 +166,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ##  Acknowledgments
 - [TMDB](https://www.themoviedb.org/) for movie data
 - [OMDB](http://www.omdbapi.com/) for additional ratings
-- [Next.js](https://nextjs.org/) for the amazing framework
+- [React Next.js](https://nextjs.org/) for the amazing framework
 - [Tailwind CSS](https://tailwindcss.com/) for styling
 - [Vercel](https://vercel.com/) for hosting
 
